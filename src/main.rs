@@ -1,28 +1,28 @@
 use axum::{
+    Router,
     body::Body,
     http::{Request, StatusCode},
     middleware::{self, Next},
     response::{IntoResponse, Json, Response},
     routing::get,
-    Router,
 };
 use once_cell::sync::Lazy;
-use opentelemetry::{global, KeyValue};
+use opentelemetry::{KeyValue, global};
 use opentelemetry_otlp::WithExportConfig;
 use opentelemetry_sdk::metrics;
 use opentelemetry_sdk::metrics::{MeterProviderBuilder, PeriodicReader, SdkMeterProvider};
 use opentelemetry_semantic_conventions::{
+    SCHEMA_URL,
     attribute::{
         DEPLOYMENT_ENVIRONMENT_NAME, NETWORK_LOCAL_ADDRESS, SERVICE_NAME, SERVICE_VERSION,
     },
-    SCHEMA_URL,
 };
 use prometheus::{Encoder, Registry, TextEncoder};
 use serde_json::json;
 use std::net::SocketAddr;
 use std::sync::Mutex;
 use sysinfo::System;
-use tokio::time::{sleep, Duration, Instant};
+use tokio::time::{Duration, Instant, sleep};
 use tracing::{info, warn};
 
 #[derive(Clone)]
