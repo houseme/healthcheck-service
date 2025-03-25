@@ -2,9 +2,13 @@
 name = "healthcheck-service"
 version = "0.1.0"
 edition = "2024"
+keywords = ["opentelemetry", "prometheus", "metrics", "async"]
+license = "Apache-2.0 OR MIT"
+description = "A healthcheck service"
+repository = "https://github.com/houseme/healthcheck-service"
 
 [dependencies]
-axum = "0.8"
+axum = "0.8.1"
 tokio = { version = "1.44", features = ["full"] }
 opentelemetry = { version = "0.29" }
 opentelemetry_sdk = { version = "0.29", features = ["rt-tokio"] }
@@ -22,6 +26,6 @@ once_cell = "1.21.1"
 [dev-dependencies]
 opentelemetry-semantic-conventions = { version = "0.29" }
 http-body-util = { version = "0.1" }
-hyper = { version = "1.3", features = ["full"] }
+hyper = { version = "1.6", features = ["full"] }
 hyper-util = { version = "0.1", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
