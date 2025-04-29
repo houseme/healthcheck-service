@@ -31,9 +31,9 @@ struct AppState {
     meter: opentelemetry::metrics::Meter,
 }
 
-///
+/// Global registry for metrics
 static GLOBAL_REGISTRY: Lazy<Mutex<Registry>> = Lazy::new(|| Mutex::new(Registry::new()));
-// 主程序入口
+// Main program entry
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();
@@ -64,7 +64,7 @@ async fn main() {
     // meter_provider.shutdown().unwrap();
 }
 
-// 配置 MeterProvider
+// Configuration MeterProvider
 fn setup_meter_provider() -> SdkMeterProvider {
     let service_name = "healthcheck-service";
     let resource = opentelemetry_sdk::Resource::builder()
@@ -105,7 +105,7 @@ fn setup_meter_provider() -> SdkMeterProvider {
         .build()
 }
 
-// 更新服务状态指标
+// Update service status metrics
 async fn update_service_status() {
     let meter = global::meter("healthcheck-service");
     let up_counter = meter.u64_counter("service.up").build();
@@ -127,7 +127,7 @@ async fn update_service_status() {
     }
 }
 
-// 更新系统指标
+// Update system metrics
 async fn update_system_metrics() {
     let meter = global::meter("healthcheck-service");
     let mut system = System::new_all();
@@ -153,7 +153,7 @@ async fn update_system_metrics() {
     }
 }
 
-// API 指标中间件
+// API metrics middleware
 async fn track_api_metrics(req: Request<Body>, next: Next) -> Response {
     let start_time = Instant::now();
     let method = req.method().to_string();
@@ -185,7 +185,7 @@ async fn track_api_metrics(req: Request<Body>, next: Next) -> Response {
     response
 }
 
-// 存活性检查端点
+// Survivability check endpoints
 async fn liveness_probe() -> Json<serde_json::Value> {
     Json(json!({
         "status": "ok",
@@ -193,7 +193,7 @@ async fn liveness_probe() -> Json<serde_json::Value> {
     }))
 }
 
-// 就绪性检查端点
+// Readiness check endpoints
 async fn readiness_probe() -> Json<serde_json::Value> {
     let meter = global::meter("healthcheck-service");
     let is_ready = 1;
@@ -209,19 +209,19 @@ async fn readiness_probe() -> Json<serde_json::Value> {
     }))
 }
 
-// 示例 API 端点
+// Sample API endpoint
 async fn api_example_handler() -> impl IntoResponse {
     Json(json!({
         "message": "API example response"
     }))
 }
 
-// 示例失败端点
+// Example failed endpoint
 async fn api_fail_handler() -> impl IntoResponse {
     (StatusCode::INTERNAL_SERVER_ERROR, "Internal Server Error")
 }
 
-// Prometheus 指标端点
+// Prometheus metrics endpoint
 async fn metrics_handler() -> String {
     let encoder = TextEncoder::new();
     // Get a reference to the registry for reading metrics
