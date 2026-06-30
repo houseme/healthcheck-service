@@ -11,7 +11,7 @@ repository = "https://github.com/houseme/healthcheck-service"
 axum = "0.8.3"
 tokio = { version = "1.44.2", features = ["full"] }
 opentelemetry = { version = "0.29.1" }
-opentelemetry_sdk = { version = "0.29.0", features = ["rt-tokio"] }
+opentelemetry_sdk = { version = "0.32.1", features = ["rt-tokio"] }
 opentelemetry-otlp = { version = "0.29.0", features = ["grpc-tonic", "gzip-tonic"] }
 opentelemetry-prometheus = "0.29.1"
 opentelemetry-semantic-conventions = { version = "0.29.0", features = ["semconv_experimental"] }
